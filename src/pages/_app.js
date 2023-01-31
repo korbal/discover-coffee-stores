@@ -5,7 +5,6 @@ export default function App({ Component, pageProps }) {
   return (
     <div>
       <Component {...pageProps} />
-      <Footer></Footer>
     </div>
   );
 }
