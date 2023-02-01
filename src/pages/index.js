@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
 import Banner from "components/banner";
+import Card from "components/card";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,6 +34,26 @@ export default function Home() {
             alt=""
             priority
           ></Image>
+          <div className={styles.cardLayout}>
+            <Card
+              name="Darkhorse Coffee"
+              imgUrl="/static/hero-image.png"
+              href="/coffee-store/darkhorse-coffee"
+              className={styles.card}
+            />
+            <Card
+              name="Darkhorse Coffee"
+              imgUrl="/static/hero-image.png"
+              href="/coffee-store/darkhorse-coffee"
+              className={styles.card}
+            />
+            <Card
+              name="Darkhorse Coffee"
+              imgUrl="/static/hero-image.png"
+              href="/coffee-store/darkhorse-coffee"
+              className={styles.card}
+            />
+          </div>
         </div>
       </main>
     </div>
