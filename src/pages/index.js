@@ -4,12 +4,21 @@ import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
 import Banner from "components/banner";
 import Card from "components/card";
-import coffeeStores from "../data/coffee-stores.json";
+import coffeeStoresData from "../data/coffee-stores.json";
 import CoffeeStore from "./coffee-store/[id]";
+
+// for SSG, this is how we bring in the data. coffeeStores is imported from a json, eventually from the backend. need to pass it to the component.
+export async function getStaticProps(context) {
+  return {
+    props: {
+      coffeeStores: coffeeStoresData,
+    }, // will be passed to the page component as props
+  };
+}
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Home(props) {
   const handleOnBannerBtnClick = () => {
     console.log("button click");
   };
@@ -36,18 +45,26 @@ export default function Home() {
             alt=""
             priority
           ></Image>
-          <div className={styles.cardLayout}>
-            {coffeeStores.map((coffeeStore) => {
-              return (
-                <Card
-                  name={coffeeStore.name}
-                  imgUrl={coffeeStore.imgUrl}
-                  href={`/coffee-store/${coffeeStore.id}`}
-                  className={styles.card}
-                />
-              );
-            })}
-          </div>
+
+          {/* only render h2 if coffeeStores has a value */}
+          {props.coffeeStores.length > 0 && (
+            <>
+              <h2 className={styles.heading2}>Toronto Coffee Stores</h2>
+              <div className={styles.cardLayout}>
+                {props.coffeeStores.map((coffeeStore) => {
+                  return (
+                    <Card
+                      name={coffeeStore.name}
+                      imgUrl={coffeeStore.imgUrl}
+                      href={`/coffee-store/${coffeeStore.id}`}
+                      className={styles.card}
+                      key={coffeeStore.id}
+                    />
+                  );
+                })}
+              </div>
+            </>
+          )}
         </div>
       </main>
     </div>
