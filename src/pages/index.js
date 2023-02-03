@@ -9,9 +9,32 @@ import CoffeeStore from "./coffee-store/[id]";
 
 // for SSG, this is how we bring in the data. coffeeStores is imported from a json, eventually from the backend. need to pass it to the component.
 export async function getStaticProps(context) {
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: "fsq3GaLdExWuQAjxPzBQ+BombGKlrwt+kUseWTGNL7FLXLE=",
+    },
+  };
+
+  // fetch(
+  //   "https://api.foursquare.com/v3/places/search?query=coffee&ll=47.203629203293026%2C18.431814711868913&limit=6",
+  //   options
+  // )
+  //   .then((response) => response.json())
+  //   .then((response) => console.log(response))
+  //   .catch((err) => console.error(err));
+
+  const response = await fetch(
+    "https://api.foursquare.com/v3/places/search?query=coffee&ll=47.203629203293026%2C18.431814711868913&limit=6",
+    options
+  );
+  const data = await response.json();
+  console.log(data);
+
   return {
     props: {
-      coffeeStores: coffeeStoresData,
+      coffeeStores: data.results,
     }, // will be passed to the page component as props
   };
 }
@@ -55,10 +78,13 @@ export default function Home(props) {
                   return (
                     <Card
                       name={coffeeStore.name}
-                      imgUrl={coffeeStore.imgUrl}
-                      href={`/coffee-store/${coffeeStore.id}`}
+                      imgUrl={
+                        coffeeStore.imgUrl ||
+                        "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
+                      }
+                      href={`/coffee-store/${coffeeStore.fsq_id}`}
                       className={styles.card}
-                      key={coffeeStore.id}
+                      key={coffeeStore.fsq_id}
                     />
                   );
                 })}
