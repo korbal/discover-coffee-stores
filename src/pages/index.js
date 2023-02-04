@@ -6,35 +6,15 @@ import Banner from "components/banner";
 import Card from "components/card";
 import coffeeStoresData from "../data/coffee-stores.json";
 import CoffeeStore from "./coffee-store/[id]";
+import { fetchCoffeeStores } from "../lib/coffee-stores";
 
-// for SSG, this is how we bring in the data. coffeeStores is imported from a json, eventually from the backend. need to pass it to the component.
+// for SSG, this is how we bring in the data. coffeeStores is imported from a json, eventually from the backend. need to pass it to the component. moved the actual fetch to lib/coffee-stores.js for better readability
 export async function getStaticProps(context) {
-  const options = {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      Authorization: "fsq3GaLdExWuQAjxPzBQ+BombGKlrwt+kUseWTGNL7FLXLE=",
-    },
-  };
-
-  // fetch(
-  //   "https://api.foursquare.com/v3/places/search?query=coffee&ll=47.203629203293026%2C18.431814711868913&limit=6",
-  //   options
-  // )
-  //   .then((response) => response.json())
-  //   .then((response) => console.log(response))
-  //   .catch((err) => console.error(err));
-
-  const response = await fetch(
-    "https://api.foursquare.com/v3/places/search?query=coffee&ll=47.203629203293026%2C18.431814711868913&limit=6",
-    options
-  );
-  const data = await response.json();
-  console.log(data);
+  const coffeeStores = await fetchCoffeeStores();
 
   return {
     props: {
-      coffeeStores: data.results,
+      coffeeStores: coffeeStores,
     }, // will be passed to the page component as props
   };
 }
