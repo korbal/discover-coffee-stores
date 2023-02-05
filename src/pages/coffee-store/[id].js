@@ -16,7 +16,7 @@ export async function getStaticProps(staticProps) {
   return {
     props: {
       coffeeStore: coffeeStores.find((coffeeStore) => {
-        return coffeeStore.fsq_id.toString() === params.id; //dynamic id
+        return coffeeStore.id.toString() === params.id; //dynamic id
       }),
     },
   };
@@ -27,7 +27,7 @@ export async function getStaticPaths() {
   const paths = coffeeStores.map((coffeeStore) => {
     return {
       params: {
-        id: coffeeStore.fsq_id.toString(),
+        id: coffeeStore.id.toString(),
       },
     };
   });
@@ -43,7 +43,7 @@ const CoffeeStore = (props) => {
     return <div>Loading...</div>;
   }
 
-  const { name, imgUrl, location } = props.coffeeStore;
+  const { name, imgUrl, address, locality } = props.coffeeStore;
 
   const handleUpvoteButton = () => {};
 
@@ -73,14 +73,19 @@ const CoffeeStore = (props) => {
         </div>
 
         <div className={cls("glass", styles.col2)}>
-          <div className={styles.iconWrapper}>
-            <Image src="/static/icons/places.svg" width="24" height="24" />
-            <p className={styles.text}>{location.address}</p>
-          </div>
-          <div className={styles.iconWrapper}>
-            <Image src="/static/icons/nearMe.svg" width="24" height="24" />
-            <p className={styles.text}>{location.locality}</p>
-          </div>
+          {/* only show address if there is address */}
+          {address && (
+            <div className={styles.iconWrapper}>
+              <Image src="/static/icons/places.svg" width="24" height="24" />
+              <p className={styles.text}>{address}</p>
+            </div>
+          )}
+          {locality && (
+            <div className={styles.iconWrapper}>
+              <Image src="/static/icons/nearMe.svg" width="24" height="24" />
+              <p className={styles.text}>{locality}</p>
+            </div>
+          )}
           <div className={styles.iconWrapper}>
             <Image src="/static/icons/star.svg" width="24" height="24" />
             <p className={styles.text}>1</p>
