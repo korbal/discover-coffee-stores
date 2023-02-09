@@ -8,8 +8,10 @@ import coffeeStoresData from "../data/coffee-stores.json";
 import CoffeeStore from "./coffee-store/[id]";
 import { fetchCoffeeStores } from "../lib/coffee-stores";
 import useTrackLocation from "hooks/use-track-location";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState, useContext } from "react";
+
+//import { ACTION_TYPES, StoreContext } from "../store/store-context";
+import { ACTION_TYPES, StoreContext } from "store/store-context";
 
 // for SSG, this is how we bring in the data. coffeeStores is imported from a json, eventually from the backend. need to pass it to the component. moved the actual fetch to lib/coffee-stores.js for better readability
 export async function getStaticProps(context) {
@@ -25,23 +27,35 @@ export async function getStaticProps(context) {
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home(props) {
-  const { handleTrackLocation, latLong, locationErrorMsg, isFindingLocation } =
+  const { handleTrackLocation, locationErrorMsg, isFindingLocation } =
     useTrackLocation();
 
   // for the dynamicly brought in places, we need a place to store them
-  const [coffeeStores, setCoffeeStores] = useState("");
+  // const [coffeeStores, setCoffeeStores] = useState("");
   const [coffeeStoresError, setCoffeeStoresError] = useState(null);
+
+  const { dispatch, state } = useContext(StoreContext);
+  const { coffeeStores, latLong } = state;
 
   console.log({ latLong, locationErrorMsg });
 
   useEffect(() => {
     if (latLong) {
       const fetchData = async () => {
+        console.log({ latLong });
         try {
-          const fetchedCoffeeStores = await fetchCoffeeStores(latLong, 30);
-          console.log({ fetchedCoffeeStores });
-          //adding the dynamicall fetched stores to state
-          setCoffeeStores(fetchedCoffeeStores);
+          const response = await fetch(
+            `/api/getCoffeeStoresByLocation?latLong=${latLong}&limit=30`
+          );
+          const coffeeStores = await response.json();
+
+          dispatch({
+            type: ACTION_TYPES.SET_COFFEE_STORES,
+            payload: {
+              coffeeStores,
+            },
+          });
+          setCoffeeStoresError("");
         } catch (error) {
           console.log({ error });
           setCoffeeStoresError(error.message);

@@ -36,7 +36,7 @@ export const fetchCoffeeStores = async (
   };
   const response = await fetch(
     getUrlForCoffeeStores(
-      // "43.203629203293026%2C-79.431814711868913",
+      //"43.203629203293026%2C-79.431814711868913",
       latLong,
       "coffee",
       limit
@@ -45,7 +45,8 @@ export const fetchCoffeeStores = async (
   );
   const data = await response.json();
   // since it's moved here in a separate file, need to be returned
-  console.log(data.results);
+  console.log("DATAGECI");
+  console.log(data);
   // going through each coffee store data and adding an imageurl to them, so that it can be displayed on the frontend.
   return data.results.map((result, idx) => {
     return {
