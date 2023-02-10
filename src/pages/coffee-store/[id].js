@@ -53,16 +53,50 @@ const CoffeeStore = (initialProps) => {
     state: { coffeeStores },
   } = useContext(StoreContext);
 
+  // if we have a new coffeestore, generated clientside, we'll just put it in the database via next.js backend api
+
+  const handleCreateCoffeeStore = async (coffeeStore) => {
+    const { id, name, imgUrl, address, locality } = coffeeStore;
+    try {
+      const data = {
+        id,
+        name,
+        voting: 0,
+        imgUrl,
+        address: address || "",
+        neighbourhood: locality || "",
+      };
+      const response = await fetch("/api/createCoffeeStore", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const dbCoffeeStore = response.json();
+      console.log({ dbCoffeeStore });
+    } catch (err) {
+      console.error("Error creating coffee store", err);
+    }
+  };
+
   useEffect(() => {
+    // if not in the statically generated pages, we'll try to find it in context and store it in airtable
     if (isEmpty(initialProps.coffeeStore)) {
       if (coffeeStores.length > 0) {
-        const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
+        const coffeeStoreFromContext = coffeeStores.find((coffeeStore) => {
           return coffeeStore.id.toString() === id;
         });
-        setCoffeeStore(findCoffeeStoreById);
+        if (coffeeStoreFromContext) {
+          setCoffeeStore(coffeeStoreFromContext);
+          handleCreateCoffeeStore(coffeeStoreFromContext);
+        }
       }
+    } else {
+      //SSG - so adding it to airtable, because we want to be able dynamically change the voting number
+
+      handleCreateCoffeeStore(initialProps.coffeeStore);
     }
-  }, [id]);
+  }, [id, initialProps, initialProps.coffeeStore]);
 
   const { name, imgUrl, address, locality } = coffeeStore;
 
