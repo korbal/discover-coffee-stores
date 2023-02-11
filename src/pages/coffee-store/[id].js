@@ -8,6 +8,7 @@ import { fetchCoffeeStores } from "../../lib/coffee-stores";
 import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "store/store-context";
 import { isEmpty } from "@/utils";
+import useSWR from "swr";
 
 // because fetching coffeestores data is in a lib, i can just use it from there
 export async function getStaticProps(staticProps) {
@@ -103,10 +104,26 @@ const CoffeeStore = (initialProps) => {
 
   const [votingCount, setVotingCount] = useState(1);
 
+  const fetcher = (url) => fetch(url).then((res) => res.json());
+  const { data, error } = useSWR(`/api/getCoffeeStoreById?id=${id}`, fetcher);
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      console.log("data from SWR", data);
+      setCoffeeStore(data[0]);
+
+      setVotingCount(data[0].voting);
+    }
+  }, [data]);
+
   const handleUpvoteButton = () => {
     let count = votingCount + 1;
     setVotingCount(count);
   };
+
+  if (error) {
+    return <div>Something went wrong retrieving coffee store page</div>;
+  }
 
   return (
     <div className={styles.layout}>
