@@ -54,6 +54,7 @@ const CoffeeStore = (initialProps) => {
   } = useContext(StoreContext);
 
   // if we have a new coffeestore, generated clientside, we'll just put it in the database via next.js backend api
+  //handleCreatedCoffeeStore would be much more appropriate as addCoffeeStoreToAirtable
 
   const handleCreateCoffeeStore = async (coffeeStore) => {
     const { id, name, imgUrl, address, locality } = coffeeStore;
@@ -100,7 +101,12 @@ const CoffeeStore = (initialProps) => {
 
   const { name, imgUrl, address, locality } = coffeeStore;
 
-  const handleUpvoteButton = () => {};
+  const [votingCount, setVotingCount] = useState(1);
+
+  const handleUpvoteButton = () => {
+    let count = votingCount + 1;
+    setVotingCount(count);
+  };
 
   return (
     <div className={styles.layout}>
@@ -143,7 +149,7 @@ const CoffeeStore = (initialProps) => {
           )}
           <div className={styles.iconWrapper}>
             <Image src="/static/icons/star.svg" width="24" height="24" />
-            <p className={styles.text}>1</p>
+            <p className={styles.text}>{votingCount}</p>
           </div>
 
           <button className={styles.upvoteButton} onClick={handleUpvoteButton}>
