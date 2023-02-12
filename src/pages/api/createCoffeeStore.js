@@ -13,7 +13,7 @@ const createCoffeeStore = async (req, res) => {
         if (records.length !== 0) {
           res.json(records);
         } else {
-          console.log({ name });
+          //console.log({ name });
 
           //create a record only, if request name and id exist
           if (name) {

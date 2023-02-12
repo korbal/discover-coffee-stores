@@ -5,7 +5,7 @@ import { render } from "react-dom";
 const Dynamic = () => {
   const router = useRouter();
   const query = router.query.d;
-  console.log(router);
+  //console.log(router);
   return (
     <div>
       <Head>

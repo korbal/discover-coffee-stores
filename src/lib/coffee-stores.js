@@ -45,8 +45,8 @@ export const fetchCoffeeStores = async (
   );
   const data = await response.json();
   // since it's moved here in a separate file, need to be returned
-  console.log("DATAGECI");
-  console.log(data);
+  //console.log("DATAGECI");
+  //console.log(data);
   // going through each coffee store data and adding an imageurl to them, so that it can be displayed on the frontend.
   return data.results.map((result, idx) => {
     return {

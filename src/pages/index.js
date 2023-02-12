@@ -37,12 +37,12 @@ export default function Home(props) {
   const { dispatch, state } = useContext(StoreContext);
   const { coffeeStores, latLong } = state;
 
-  console.log({ latLong, locationErrorMsg });
+  //console.log({ latLong, locationErrorMsg });
 
   useEffect(() => {
     if (latLong) {
       const fetchData = async () => {
-        console.log({ latLong });
+        //console.log({ latLong });
         try {
           const response = await fetch(
             `/api/getCoffeeStoresByLocation?latLong=${latLong}&limit=30`
@@ -57,7 +57,7 @@ export default function Home(props) {
           });
           setCoffeeStoresError("");
         } catch (error) {
-          console.log({ error });
+          //console.log({ error });
           setCoffeeStoresError(error.message);
         }
       };
