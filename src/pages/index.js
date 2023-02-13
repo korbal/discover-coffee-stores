@@ -63,7 +63,7 @@ export default function Home(props) {
       };
       fetchData();
     }
-  }, [latLong]);
+  }, [latLong, dispatch]);
 
   const handleOnBannerBtnClick = () => {
     handleTrackLocation();

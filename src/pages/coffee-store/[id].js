@@ -167,7 +167,7 @@ const CoffeeStore = (initialProps) => {
             width={600}
             height={360}
             className={styles.storeImg}
-            alt={name}
+            alt="Store"
           />
         </div>
 
@@ -175,18 +175,28 @@ const CoffeeStore = (initialProps) => {
           {/* only show address if there is address */}
           {address && (
             <div className={styles.iconWrapper}>
-              <Image src="/static/icons/places.svg" width="24" height="24" />
+              <Image
+                src="/static/icons/places.svg"
+                width="24"
+                height="24"
+                alt=""
+              />
               <p className={styles.text}>{address}</p>
             </div>
           )}
           {locality && (
             <div className={styles.iconWrapper}>
-              <Image src="/static/icons/nearMe.svg" width="24" height="24" />
+              <Image
+                src="/static/icons/nearMe.svg"
+                width="24"
+                height="24"
+                alt=""
+              />
               <p className={styles.text}>{locality}</p>
             </div>
           )}
           <div className={styles.iconWrapper}>
-            <Image src="/static/icons/star.svg" width="24" height="24" />
+            <Image src="/static/icons/star.svg" width="24" height="24" alt="" />
             <p className={styles.text}>{votingCount}</p>
           </div>
 
